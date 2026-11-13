@@ -43,8 +43,10 @@ backup file `db/custom.db`** secara berkala. Tidak perlu MySQL/Redis.
 
 Workflow `.github/workflows/github-pages-preview.yml` builds and publishes a
 static preview at `https://adinas4.github.io/fit-tax/` after each push to
-`main`. The source repository can remain private; the published preview is
-public. GitHub Pages must be available for the repository's plan.
+`main`. Preview dan repository source saat ini bersifat public karena paket
+GitHub akun ini tidak mendukung Pages dari repository private. Mengubah repo
+menjadi private akan menonaktifkan Pages; untuk menjaga source tetap private,
+gunakan paket GitHub yang mendukung Pages pada repository private.
 
 This is only a visual preview: admin pages, API routes, database-backed data,
 and consultation form submission are not deployed. Public sample content is
