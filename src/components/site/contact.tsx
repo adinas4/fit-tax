@@ -219,9 +219,15 @@ export function Contact() {
               <CardContent className="p-6 md:p-8">
                 {IS_GITHUB_PREVIEW ? (
                   <div className="flex h-full min-h-[420px] flex-col items-center justify-center text-center">
-                    <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-gold/10 text-gold">
+                    <a
+                      href={wa()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Chat via WhatsApp"
+                      className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-gold/10 text-gold"
+                    >
                       <MessageCircle className="h-8 w-8" />
-                    </span>
+                    </a>
                     <h3 className="mt-5 text-xl font-bold text-navy">
                       Ini adalah Preview Website
                     </h3>
