@@ -8,6 +8,10 @@ import { getServiceIcon, waLink } from "@/lib/content";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
+  IS_GITHUB_PREVIEW,
+  PREVIEW_SERVICES,
+} from "@/lib/github-preview";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -26,11 +30,14 @@ interface ServiceItem {
 }
 
 export function Services() {
-  const [services, setServices] = useState<ServiceItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [services, setServices] = useState<ServiceItem[]>(
+    IS_GITHUB_PREVIEW ? PREVIEW_SERVICES : []
+  );
+  const [loading, setLoading] = useState(!IS_GITHUB_PREVIEW);
   const [active, setActive] = useState<ServiceItem | null>(null);
 
   useEffect(() => {
+    if (IS_GITHUB_PREVIEW) return;
     fetch("/api/services")
       .then((r) => r.json())
       .then((d) => {

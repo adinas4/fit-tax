@@ -4,6 +4,7 @@ import { MessageCircle, ArrowRight, ShieldCheck, Clock, CheckCircle2, Lock, Badg
 import { Button } from "@/components/ui/button";
 import { VALUE_STATS } from "@/lib/content";
 import { useSettings, useWaLink } from "@/hooks/use-settings";
+import { previewAsset } from "@/lib/github-preview";
 
 export function Hero() {
   const settings = useSettings();
@@ -16,7 +17,7 @@ export function Hero() {
     >
       <div className="absolute inset-0 -z-10">
         <img
-          src="/images/office-tower.jpg"
+          src={previewAsset("/images/office-tower.jpg")}
           alt="Gedung perkantoran modern sebagai latar belakang FIT-TAX Cakrawala Sinergi"
           className="h-full w-full object-cover opacity-40"
           fetchPriority="high"

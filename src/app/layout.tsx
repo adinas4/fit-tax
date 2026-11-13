@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { previewAsset } from "@/lib/github-preview";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -36,9 +37,9 @@ export const metadata: Metadata = {
   authors: [{ name: "FIT-TAX Cakrawala Sinergi" }],
   creator: "FIT-TAX Cakrawala Sinergi",
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+    icon: previewAsset("/favicon.png"),
+    shortcut: previewAsset("/favicon.png"),
+    apple: previewAsset("/favicon.png"),
   },
   alternates: { canonical: "/" },
   openGraph: {

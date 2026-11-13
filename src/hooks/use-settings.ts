@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { COMPANY, waLink } from "@/lib/content";
+import { IS_GITHUB_PREVIEW } from "@/lib/github-preview";
 
 export interface LiveSettings {
   company: {
@@ -60,7 +61,7 @@ export function useSettings() {
 
   useEffect(() => {
     let active = true;
-    if (cache) {
+    if (cache || IS_GITHUB_PREVIEW) {
       return;
     }
     fetch("/api/settings")

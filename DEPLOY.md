@@ -2,17 +2,19 @@
 
 Dokumen ini menjelaskan langkah demi langkah cara meng-host website ini di
 Hostinger. Ada dua opsi: **VPS (disarankan)** dan **Shared Hosting (alternatif)**.
+Untuk pratinjau tampilan statis melalui GitHub Pages, lihat [GitHub Pages preview](#github-pages-preview).
 
 ---
 
 ## Daftar Isi
 1. [Ringkasan teknologi](#1-ringkasan-teknologi)
-2. [Opsi A — VPS Hostinger (DISARANKAN)](#opsi-a--vps-hostinger-disarankan)
-3. [Opsi B — Shared Hosting Hostinger (alternatif)](#opsi-b--shared-hosting-hostinger-alternatif)
-4. [Konfigurasi domain & SSL](#konfigurasi-domain--ssl)
-5. [Backup data](#backup-data)
-6. [Update / redeploy](#update--redeploy)
-7. [Troubleshooting](#troubleshooting)
+2. [GitHub Pages preview](#github-pages-preview)
+3. [Opsi A — VPS Hostinger (DISARANKAN)](#opsi-a--vps-hostinger-disarankan)
+4. [Opsi B — Shared Hosting Hostinger (alternatif)](#opsi-b--shared-hosting-hostinger-alternatif)
+5. [Konfigurasi domain & SSL](#konfigurasi-domain--ssl)
+6. [Backup data](#backup-data)
+7. [Update / redeploy](#update--redeploy)
+8. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -34,6 +36,21 @@ backup file `db/custom.db`** secara berkala. Tidak perlu MySQL/Redis.
 > berjalan terus-menerus (long-running). VPS Hostinger mendukung Node.js + PM2
 > penuh. Shared Hosting Hostinger punya fitur Node.js terbatas (via Passenger)
 > yang berfungsi tapi punya batasan memori & proses.
+
+---
+
+## GitHub Pages preview
+
+Workflow `.github/workflows/github-pages-preview.yml` builds and publishes a
+static preview at `https://adinas4.github.io/fit-tax/` after each push to
+`main`. The source repository can remain private; the published preview is
+public. GitHub Pages must be available for the repository's plan.
+
+This is only a visual preview: admin pages, API routes, database-backed data,
+and consultation form submission are not deployed. Public sample content is
+used instead, and visitors are directed to contact the team through WhatsApp.
+For a fully working website, deploy the application to a Node.js host using
+the instructions below.
 
 ---
 

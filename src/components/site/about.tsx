@@ -5,6 +5,7 @@ import { SectionHeading } from "./section-heading";
 import { Reveal } from "./reveal";
 import { COMPANY, VISION, MISSION } from "@/lib/content";
 import { Card, CardContent } from "@/components/ui/card";
+import { previewAsset } from "@/lib/github-preview";
 
 const COMPETENCIES = [
   {
@@ -39,7 +40,7 @@ export function About() {
           <Reveal className="flex flex-col gap-6">
             <div className="relative overflow-hidden rounded-2xl shadow-xl ring-1 ring-slate-200/70">
               <img
-                src="/images/consult-strategy.jpg"
+                src={previewAsset("/images/consult-strategy.jpg")}
                 alt="Tim profesional FIT-TAX Cakrawala Sinergi dalam diskusi konsultasi perpajakan"
                 className="aspect-[4/3] w-full object-cover"
                 loading="lazy"

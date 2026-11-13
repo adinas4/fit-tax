@@ -9,6 +9,11 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import {
+  IS_GITHUB_PREVIEW,
+  PREVIEW_PORTFOLIO,
+  previewAsset,
+} from "@/lib/github-preview";
 
 interface PortfolioItem {
   id: string;
@@ -24,14 +29,24 @@ interface PortfolioItem {
 }
 
 export function Portfolio() {
-  const [items, setItems] = useState<PortfolioItem[]>([]);
+  const [items, setItems] = useState<PortfolioItem[]>(
+    IS_GITHUB_PREVIEW ? PREVIEW_PORTFOLIO : []
+  );
   const [active, setActive] = useState<PortfolioItem | null>(null);
   const [category, setCategory] = useState("Semua");
   const [reqVersion, setReqVersion] = useState(1);
-  const [loadedVersion, setLoadedVersion] = useState(0);
+  const [loadedVersion, setLoadedVersion] = useState(
+    IS_GITHUB_PREVIEW ? 1 : 0
+  );
   const loading = reqVersion !== loadedVersion;
+  const visibleItems =
+    IS_GITHUB_PREVIEW && category !== "Semua"
+      ? PREVIEW_PORTFOLIO.filter((item) => item.category === category)
+      : items;
 
   useEffect(() => {
+    if (IS_GITHUB_PREVIEW) return;
+
     let mounted = true;
     const qs =
       category !== "Semua" ? `?category=${encodeURIComponent(category)}` : "";
@@ -51,7 +66,7 @@ export function Portfolio() {
 
   const handleCategory = (c: string) => {
     setCategory(c);
-    setReqVersion((v) => v + 1);
+    if (!IS_GITHUB_PREVIEW) setReqVersion((v) => v + 1);
   };
 
   const categories = ["Semua", ...PORTFOLIO_CATEGORIES];
@@ -95,7 +110,7 @@ export function Portfolio() {
           </div>
         ) : (
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {items.map((item, i) => (
+            {visibleItems.map((item, i) => (
               <Reveal key={item.id} delay={(i % 3) * 80}>
                 <Card
                   onClick={() => setActive(item)}
@@ -112,7 +127,7 @@ export function Portfolio() {
                   <div className="relative aspect-[16/10] overflow-hidden">
                     {item.image ? (
                       <img
-                        src={item.image}
+                        src={previewAsset(item.image)}
                         alt={`Ilustrasi ${item.title}`}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         loading="lazy"
@@ -155,7 +170,7 @@ export function Portfolio() {
           </div>
         )}
 
-        {items.length === 0 && !loading && (
+        {visibleItems.length === 0 && !loading && (
           <p className="mt-12 text-center text-sm text-slate-500">
             Belum ada portofolio pada kategori ini.
           </p>
@@ -177,7 +192,7 @@ export function Portfolio() {
             <div className="relative aspect-[16/9] overflow-hidden rounded-t-2xl">
               {active.image ? (
                 <img
-                  src={active.image}
+                  src={previewAsset(active.image)}
                   alt={`Ilustrasi ${active.title}`}
                   className="h-full w-full object-cover"
                 />

@@ -23,6 +23,11 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import { useToast } from "@/hooks/use-toast";
+import {
+  IS_GITHUB_PREVIEW,
+  PREVIEW_ARTICLES,
+  previewAsset,
+} from "@/lib/github-preview";
 
 interface ArticleSummary {
   id: string;
@@ -54,9 +59,13 @@ function formatDate(iso: string) {
 }
 
 export function Insights() {
-  const [articles, setArticles] = useState<ArticleSummary[]>([]);
-  const [popular, setPopular] = useState<ArticleSummary[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [articles, setArticles] = useState<ArticleSummary[]>(
+    IS_GITHUB_PREVIEW ? PREVIEW_ARTICLES : []
+  );
+  const [popular, setPopular] = useState<ArticleSummary[]>(
+    IS_GITHUB_PREVIEW ? PREVIEW_ARTICLES : []
+  );
+  const [loading, setLoading] = useState(!IS_GITHUB_PREVIEW);
   const [category, setCategory] = useState("Semua");
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -76,6 +85,26 @@ export function Insights() {
   // fetch articles
   useEffect(() => {
     let mounted = true;
+    if (IS_GITHUB_PREVIEW) {
+      const query = debouncedSearch.trim().toLocaleLowerCase("id");
+      setArticles(
+        PREVIEW_ARTICLES.filter((article) => {
+          const matchesCategory =
+            category === "Semua" || article.category === category;
+          const matchesSearch =
+            !query ||
+            `${article.title} ${article.excerpt}`
+              .toLocaleLowerCase("id")
+              .includes(query);
+          return matchesCategory && matchesSearch;
+        })
+      );
+      setLoading(false);
+      return () => {
+        mounted = false;
+      };
+    }
+
     setLoading(true);
     const params = new URLSearchParams();
     if (category !== "Semua") params.set("category", category);
@@ -95,6 +124,7 @@ export function Insights() {
 
   // fetch popular (once)
   useEffect(() => {
+    if (IS_GITHUB_PREVIEW) return;
     fetch(`/api/articles?sort=popular&limit=4`)
       .then((r) => r.json())
       .then((d) => {
@@ -107,6 +137,16 @@ export function Insights() {
     setLoadingDetail(true);
     setActive(null);
     setRelated([]);
+    if (IS_GITHUB_PREVIEW) {
+      const article = PREVIEW_ARTICLES.find((item) => item.slug === slug);
+      if (article) {
+        setActive(article);
+        document.body.style.overflow = "hidden";
+      }
+      setLoadingDetail(false);
+      return;
+    }
+
     try {
       const res = await fetch(`/api/articles/${slug}`);
       const d = await res.json();
@@ -232,7 +272,7 @@ export function Insights() {
                       <div className="relative aspect-[16/10] overflow-hidden">
                         {a.coverImage ? (
                           <img
-                            src={a.coverImage}
+                            src={previewAsset(a.coverImage)}
                             alt={a.title}
                             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                             loading="lazy"
@@ -351,7 +391,7 @@ export function Insights() {
                 <div className="relative aspect-[16/8] overflow-hidden rounded-t-2xl">
                   {active.coverImage ? (
                     <img
-                      src={active.coverImage}
+                      src={previewAsset(active.coverImage)}
                       alt={active.title}
                       className="h-full w-full object-cover"
                     />
@@ -448,7 +488,7 @@ export function Insights() {
                           <div className="relative aspect-[16/10] overflow-hidden rounded-lg">
                             {r.coverImage ? (
                               <img
-                                src={r.coverImage}
+                                src={previewAsset(r.coverImage)}
                                 alt={r.title}
                                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                                 loading="lazy"

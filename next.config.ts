@@ -1,7 +1,17 @@
 import type { NextConfig } from "next";
 
+const isGithubPages = process.env.GITHUB_PAGES === "true";
+
 const nextConfig: NextConfig = {
-  output: "standalone",
+  ...(isGithubPages
+    ? {
+        output: "export" as const,
+        basePath: "/fit-tax",
+        assetPrefix: "/fit-tax",
+        trailingSlash: true,
+        images: { unoptimized: true },
+      }
+    : { output: "standalone" as const }),
   typescript: {
     ignoreBuildErrors: true,
   },

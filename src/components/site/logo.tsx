@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { previewAsset } from "@/lib/github-preview";
 
 interface LogoProps {
   variant?: "light" | "dark";
@@ -27,7 +28,9 @@ export function Logo({
   compact = false,
 }: LogoProps) {
   const isLight = variant === "light";
-  const imgSrc = isLight ? "/images/logo-light.png" : "/images/logo-dark.png";
+  const imgSrc = previewAsset(
+    isLight ? "/images/logo-light.png" : "/images/logo-dark.png"
+  );
 
   return (
     <span className={cn("flex items-center", className)}>

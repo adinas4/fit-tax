@@ -32,6 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { IS_GITHUB_PREVIEW } from "@/lib/github-preview";
 
 const schema = z.object({
   fullName: z.string().min(2, "Nama lengkap wajib diisi"),
@@ -216,7 +217,26 @@ export function Contact() {
           <Reveal delay={120} className="lg:col-span-3">
             <Card className="h-full border border-slate-200 bg-white shadow-sm">
               <CardContent className="p-6 md:p-8">
-                {submitted ? (
+                {IS_GITHUB_PREVIEW ? (
+                  <div className="flex h-full min-h-[420px] flex-col items-center justify-center text-center">
+                    <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-gold/10 text-gold">
+                      <MessageCircle className="h-8 w-8" />
+                    </span>
+                    <h3 className="mt-5 text-xl font-bold text-navy">
+                      Ini adalah Preview Website
+                    </h3>
+                    <p className="mt-2 max-w-md text-sm text-slate-600">
+                      Formulir konsultasi tidak aktif pada preview GitHub Pages.
+                      Silakan hubungi tim FIT-TAX melalui WhatsApp.
+                    </p>
+                    <Button asChild className="mt-6 bg-gold-gradient text-navy hover:opacity-90">
+                      <a href={wa()} target="_blank" rel="noopener noreferrer">
+                        <MessageCircle className="mr-2 h-4 w-4" />
+                        Chat via WhatsApp
+                      </a>
+                    </Button>
+                  </div>
+                ) : submitted ? (
                   <div className="flex h-full min-h-[420px] flex-col items-center justify-center text-center">
                     <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-green-50 text-green-600">
                       <CheckCircle2 className="h-8 w-8" />

@@ -5,6 +5,11 @@ import { Award, User, Briefcase } from "lucide-react";
 import { SectionHeading } from "./section-heading";
 import { Reveal } from "./reveal";
 import { Card } from "@/components/ui/card";
+import {
+  IS_GITHUB_PREVIEW,
+  PREVIEW_TEAM,
+  previewAsset,
+} from "@/lib/github-preview";
 
 interface TeamMember {
   id: string;
@@ -16,10 +21,13 @@ interface TeamMember {
 }
 
 export function Team() {
-  const [team, setTeam] = useState<TeamMember[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [team, setTeam] = useState<TeamMember[]>(
+    IS_GITHUB_PREVIEW ? PREVIEW_TEAM : []
+  );
+  const [loading, setLoading] = useState(!IS_GITHUB_PREVIEW);
 
   useEffect(() => {
+    if (IS_GITHUB_PREVIEW) return;
     fetch("/api/team")
       .then((r) => r.json())
       .then((d) => {
@@ -54,7 +62,7 @@ export function Team() {
                     <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-white/10 ring-4 ring-white/10 backdrop-blur">
                       {member.photoUrl ? (
                         <img
-                          src={member.photoUrl}
+                          src={previewAsset(member.photoUrl)}
                           alt={member.name}
                           className="h-full w-full rounded-full object-cover"
                         />
