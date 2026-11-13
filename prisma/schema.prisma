@@ -1,0 +1,144 @@
+// Prisma schema for CV CAKRAWALA INTI TEKNIK (CMS-enabled)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model ConsultationRequest {
+  id          String   @id @default(cuid())
+  fullName    String
+  company     String?
+  email       String
+  whatsapp    String
+  serviceType String
+  message     String
+  agreement   Boolean  @default(false)
+  status      String   @default("new") // new | contacted | closed
+  adminNotes  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Article {
+  id              String   @id @default(cuid())
+  title           String
+  slug            String   @unique
+  excerpt         String
+  content         String
+  category        String
+  tags            String   @default("")
+  coverImage      String?
+  author          String   @default("Tim CV Cakrawala Inti Teknik")
+  readingMinutes  Int      @default(4)
+  isPopular       Boolean  @default(false)
+  published       Boolean  @default(true)
+  publishedAt     DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  seoTitle        String?
+  seoDescription  String?
+
+  @@index([category])
+  @@index([publishedAt])
+  @@index([isPopular])
+  @@index([published])
+}
+
+model PortfolioItem {
+  id           String   @id @default(cuid())
+  title        String
+  category     String
+  industry     String
+  year         String
+  challenge    String
+  approach     String
+  result       String
+  image        String?
+  isExample    Boolean  @default(true)
+  published    Boolean  @default(true)
+  publishedAt  DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([category])
+  @@index([year])
+  @@index([published])
+}
+
+model Service {
+  id           String   @id @default(cuid())
+  name         String
+  slug         String   @unique
+  short        String
+  benefits     String   @default("[]") // JSON string array
+  details      String   @default("[]") // JSON string array
+  iconName     String   @default("ClipboardCheck")
+  position     Int      @default(0)
+  published    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([published])
+}
+
+model TeamMember {
+  id          String   @id @default(cuid())
+  name        String
+  role        String
+  credentials String?
+  bio         String?
+  photoUrl    String?
+  position    Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([published])
+}
+
+model Testimonial {
+  id         String   @id @default(cuid())
+  clientName String
+  company    String?
+  role       String?
+  message    String
+  rating     Int      @default(5)
+  approved   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([approved])
+}
+
+model SiteSetting {
+  key       String   @id
+  value     String   @default("")
+  updatedAt DateTime @updatedAt
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("admin")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model AdminSession {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
